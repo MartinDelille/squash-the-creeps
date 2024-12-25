@@ -2,6 +2,9 @@ extends Node
 
 @export var mob_scene: PackedScene
 
+func _ready():
+	$UserInterface/Retry.hide()
+	
 func _on_mob_timer_timeout() -> void:
 	# Create a new instance of the Mob scene.
 	var mob = mob_scene.instantiate()
@@ -23,3 +26,9 @@ func _on_mob_timer_timeout() -> void:
 
 func _on_player_hit() -> void:
 	$MobTimer.stop()
+	$UserInterface/Retry.show()
+
+func _unhandled_input(event):
+	if event.is_action_pressed("ui_accept") and $UserInterface/Retry.visible:
+		# This restarts the current scene.
+		get_tree().reload_current_scene()
